@@ -5,44 +5,56 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <html>
-    
+
     <head>
-        
+
         <title>TODO supply a title</title>
-        
+
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        
+
         <link href="CSS/index.css" rel="stylesheet" type="text/css"/>
- 
+
         <script src="JS/jquery-3.1.1.js" type="text/javascript"></script>
         <script type="text/javascript">
-            function chargeJson(){
-                $.getJSON("JSON/films.json", function (data){
-                   var tabFilms = data.films;
-                   
-                   for(i=0;i<tabFilms.length;i++){
-                       $('#liste').append('<tr><td>Titre : </td><td>'+tabFilms[i].titre+'</td><td>Synopsis : </td><td>'+tabFilms[i].synopsis+'</td></tr>');
-                   }
+            function chargeJson() {
+                $.getJSON("JSON/films.json", function (data) {
+                    var tabFilms = data.films;
+
+                    for (i = 0; i < tabFilms.length; i++) {
+                        $('#liste').append('<tr><td>Titre : </td><td>' + tabFilms[i].titre + '</td><td>Synopsis : </td><td>' + tabFilms[i].synopsis + '</td></tr>');
+                    }
                 });
             }
+
+            function changercouleur() {
+                $('tr:first').css('background-color', 'red');
+                $('tr:nth(1)').css('background-color', 'black');
+                $('tr:nth(1)').css('color', 'yellow');
+                $('tr:last').css('background-color', 'blue');
+                $('tr:last').css('color', 'white');
+            }
+
+
+
+
         </script>
-    
+
     </head>
-    
+
     <body>
-        
+
         <input type="button" value="Charger JSON" onclick="chargeJson();" />
-        
+
         <div id="contenu">Liste des Films</div>
-        
+
         <table id="liste">
-            
+
         </table>
-        
-        
-        
-        
-        
+
+        <input type="button" value="Changer couleur" onclick="changercouleur();" />
+
+
+
     </body>
 </html>
