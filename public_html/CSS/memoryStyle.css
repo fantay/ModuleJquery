@@ -16,3 +16,9 @@ table{
     text-align: center;
     margin: auto;
 }
+
+input{
+    height: 100px;
+    width: 100px;
+    margin: 15px;
+}
