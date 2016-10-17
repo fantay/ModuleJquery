@@ -9,10 +9,9 @@ var saisie;
 var nbrCaseJeu;
 var testfin = 0;
 var nbrEssais = 0;
-var nbrClic = 0;
 
-
-var avantDernierBoutonCliquer = undefined;
+var choix1 = undefined;
+var choix2 = undefined;
 
 /* fonction */
 
@@ -71,36 +70,34 @@ function clicCase(event) {
         return;
     }
 
+    //test si il reste des cases disponibles
+    if (nbrCaseJeu == testfin) {
+        alert('jeu finit en ' + nbrEssais + ' essais.');
+    }
     //retourne la case cliquer
     $(boutonCliquer).attr('value', $(boutonCliquer).attr('nbrCacher'));
 
     //si premier clic initialise avantDernier et quitte
-    if (avantDernierBoutonCliquer == undefined) {
-        avantDernierBoutonCliquer = boutonCliquer;
+    if (choix1 == undefined) {
+        choix1 = boutonCliquer;
         boutonCliquer = undefined;
         return;
-    }
-    //deuxieme clic
-    // si identiques desactive les cases et reset avantDernier
-    if ($(avantDernierBoutonCliquer).attr('nbrCacher') == $(boutonCliquer).attr('nbrCacher')) {
-        $(avantDernierBoutonCliquer).css('visibility', 'hidden');
-        $(boutonCliquer).css('visibility', 'hidden');
-        avantDernierBoutonCliquer = undefined;
+    } else if (choix2 == undefined) {   //deuxieme clic 
+        choix2 = boutonCliquer;
+        boutonCliquer = undefined;
+    } else if ($(choix1).attr('nbrCacher') == $(choix2).attr('nbrCacher')) {     // si identiques desactive les cases et reset avantDernier
+        $(choix1).css('visibility', 'hidden');
+        $(choix2).css('visibility', 'hidden');
+        choix1 = undefined;
+        choix2 = undefined;
         testfin++;
         nbrEssais++;
-    }
-    //pas identique efface les valeurs et reset avantDernier  
-    else if ($(avantDernierBoutonCliquer).attr('nbrCacher') != $(boutonCliquer).attr('nbrCacher')) {
-            $(avantDernierBoutonCliquer).attr('value', '');
-            $(boutonCliquer).attr('value', '');
-            avantDernierBoutonCliquer = undefined;
-            nbrEssais++;
-
-    }
-
-    //test si il reste des cases disponibles
-    if (nbrCaseJeu == testfin) {
-        alert('jeu finit en ' + nbrEssais + ' essais.');
+    } else if ($(choix1).attr('nbrCacher') != $(choix2).attr('nbrCacher')) {     //pas identique efface les valeurs et reset avantDernier  
+        $(choix1).attr('value', '');
+        $(choix2).attr('value', '');
+        choix1 = undefined;
+        choix2 = undefined;
+        nbrEssais++;
     }
 
 }
