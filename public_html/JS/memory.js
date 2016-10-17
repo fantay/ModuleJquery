@@ -8,6 +8,8 @@
 var saisie;
 var nbrCaseJeu;
 var testfin = 0;
+var nbrEssais = 0;
+var nbrClic = 0;
 
 
 var avantDernierBoutonCliquer = undefined;
@@ -62,35 +64,43 @@ function clicCase(event) {
 
     // recupere le bouton cliquer
     var boutonCliquer = event.target;
-    
+
+    //test si le bouton a deja etait cliquer
+    if ($(boutonCliquer).attr('value') != '') {
+        alert('bouton deja choisie');
+        return;
+    }
+
     //retourne la case cliquer
-    $(boutonCliquer).attr('value',  $(boutonCliquer).attr('nbrCacher') );
+    $(boutonCliquer).attr('value', $(boutonCliquer).attr('nbrCacher'));
 
     //si premier clic initialise avantDernier et quitte
-    if (avantDernierBoutonCliquer == undefined){
+    if (avantDernierBoutonCliquer == undefined) {
         avantDernierBoutonCliquer = boutonCliquer;
         boutonCliquer = undefined;
-        return ;
+        return;
     }
-    
     //deuxieme clic
     // si identiques desactive les cases et reset avantDernier
-    if ($(avantDernierBoutonCliquer).attr('nbrCacher') == $(boutonCliquer).attr('nbrCacher')){
-        $(avantDernierBoutonCliquer).css('visibility','hidden');
-        $(boutonCliquer).css('visibility','hidden');
+    if ($(avantDernierBoutonCliquer).attr('nbrCacher') == $(boutonCliquer).attr('nbrCacher')) {
+        $(avantDernierBoutonCliquer).css('visibility', 'hidden');
+        $(boutonCliquer).css('visibility', 'hidden');
         avantDernierBoutonCliquer = undefined;
         testfin++;
+        nbrEssais++;
     }
-    //pas identique efface les valeurs et reset avantDernier
-    else if ($(avantDernierBoutonCliquer).attr('nbrCacher') != $(boutonCliquer).attr('nbrCacher')){ 
-        $(avantDernierBoutonCliquer).attr('value','');
-        $(boutonCliquer).attr('value','');
-        avantDernierBoutonCliquer = undefined;
+    //pas identique efface les valeurs et reset avantDernier  
+    else if ($(avantDernierBoutonCliquer).attr('nbrCacher') != $(boutonCliquer).attr('nbrCacher')) {
+            $(avantDernierBoutonCliquer).attr('value', '');
+            $(boutonCliquer).attr('value', '');
+            avantDernierBoutonCliquer = undefined;
+            nbrEssais++;
+
     }
-    
+
     //test si il reste des cases disponibles
-    if(nbrCaseJeu == testfin){
-        alert('jeu finit');
+    if (nbrCaseJeu == testfin) {
+        alert('jeu finit en ' + nbrEssais + ' essais.');
     }
 
 }
@@ -116,7 +126,6 @@ function plateau() {
     $('#tableJeu').append(html);
 
     $("input").click(clicCase);
-
 
 }
 
