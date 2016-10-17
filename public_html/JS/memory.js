@@ -6,10 +6,14 @@
 
 /* variable gobal */
 var saisie;
-var clic1;
-var clic2;
+var nbrCaseJeu;
+var testfin = 0;
+
+
+var avantDernierBoutonCliquer = undefined;
 
 /* fonction */
+
 
 //saisie du chiffre et analyse de la pariter ok
 function nbrCase() {
@@ -20,17 +24,20 @@ function nbrCase() {
 
 }
 
+
 //variable tableau en fonction de la saisie
 var tableauDeValeur = [];
 
+
 //calcule des valeurs du plateau
 function valeuraleatoire() {
-    max = saisie / 2;
-    for (i = 0; i < max; i++) {
+    nbrCaseJeu = saisie / 2;
+    for (i = 0; i < nbrCaseJeu; i++) {
         tableauDeValeur.push(i + 1);
         tableauDeValeur.push(i + 1);
     }
 }
+
 
 //melange des valeurs du tableau
 function melange() {
@@ -49,15 +56,56 @@ function melange() {
     }
 }
 
+
+//gestion du clic et test de la valeur des cases
+function clicCase(event) {
+
+    // recupere le bouton cliquer
+    var boutonCliquer = event.target;
+    
+    //retourne la case cliquer
+    $(boutonCliquer).attr('value',  $(boutonCliquer).attr('nbrCacher') );
+
+    //si premier clic initialise avantDernier et quitte
+    if (avantDernierBoutonCliquer == undefined){
+        avantDernierBoutonCliquer = boutonCliquer;
+        boutonCliquer = undefined;
+        return ;
+    }
+    
+    //deuxieme clic
+    // si identiques desactive les cases et reset avantDernier
+    if ($(avantDernierBoutonCliquer).attr('nbrCacher') == $(boutonCliquer).attr('nbrCacher')){
+        $(avantDernierBoutonCliquer).css('visibility','hidden');
+        $(boutonCliquer).css('visibility','hidden');
+        avantDernierBoutonCliquer = undefined;
+        testfin++;
+    }
+    //pas identique efface les valeurs et reset avantDernier
+    else if ($(avantDernierBoutonCliquer).attr('nbrCacher') != $(boutonCliquer).attr('nbrCacher')){ 
+        $(avantDernierBoutonCliquer).attr('value','');
+        $(boutonCliquer).attr('value','');
+        avantDernierBoutonCliquer = undefined;
+    }
+    
+    //test si il reste des cases disponibles
+    if(nbrCaseJeu == testfin){
+        alert('jeu finit');
+    }
+
+}
+
+
 //generation du tableau suite a la saisie valide
 function plateau() {
 
     var html = "";
     valeuraleatoire();
     melange();
+
     html += '<tr>';
     for (i = 0; i < saisie; i++) {
-        html += '<td><input id="' + i + '" type="button" attr="' + tableauDeValeur[i] + '" value=""/></td>';
+        html += '<td><input id="' + i + '" type="button" nbrCacher="' + tableauDeValeur[i] + '" value=""/></td>';
 
         if ((i + 1) % 4 == 0) {
             html += '</tr><tr>';
@@ -66,35 +114,11 @@ function plateau() {
     html += '</tr>';
 
     $('#tableJeu').append(html);
+
     $("input").click(clicCase);
-    testChiffre();
+
+
 }
-
-//gestion du clic et test de la valeur des cases
-function clicCase(event) {
-
-    if (clic1 == undefined) {
-        var target = event.target;
-        var tempo = $(target).attr('attr');
-        clic1 = $(target).attr('value', tempo);
-    } else if (clic2 == undefined) {
-        var target = event.target;
-        var tempo = $(target).attr('attr');
-        clic2 = $(target).attr('value', tempo);
-    }
-}
-
-function testChiffre() {
-    var test1 = $(clic1.target).attr('attr');
-    var test2 = $(clic2.target).attr('attr');
-    if (test1 != test2) {
-        $(clic1.target).attr('value', ' ');
-        $(clic2.target).attr('value', ' ');
-
-    }
-}
-
-
 
 
 //lancement du jeu
